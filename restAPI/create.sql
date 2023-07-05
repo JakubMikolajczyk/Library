@@ -30,7 +30,7 @@ CREATE Table book(
     ISBN        varchar(20) NOT NULL UNIQUE,
     tittle      varchar(50) NOT NULL,
     year        integer  NOT NULL,
-    author_id   integer REFERENCES author(id),
+    author_id   integer REFERENCES author(id) NOT NULL,
     delete_date timestamp DEFAULT null
 );
 
@@ -42,22 +42,22 @@ CREATE Table book_category(
 
 CREATE TABLE specimen(
     id       serial PRIMARY KEY,
-    book_id  integer REFERENCES book(id)
+    book_id  integer REFERENCES book(id) NOT NULL
 );
 
 CREATE TABLE borrow(
     specimen_id integer PRIMARY KEY REFERENCES specimen(id),
-    book_id     integer REFERENCES book(id),
-    user_id     integer REFERENCES users(id),
-    start_time  timestamp DEFAULT now()
+    user_id     integer REFERENCES users(id) NOT NULL,
+    start_time  timestamp DEFAULT now() NOT NULL
 );
 
 CREATE TABLE borrow_history(
     id         serial PRIMARY KEY,
-    book_id    integer REFERENCES book(id),
-    user_id    integer REFERENCES users(id),
+    book_id    integer REFERENCES book(id) NOT NULL,
+    user_id    integer REFERENCES users(id) NOT NULL,
     start_time timestamp NOT NULL,
-    end_time   timestamp DEFAULT now()
+    end_time   timestamp DEFAULT now() NOT NULL,
+    hidden     boolean DEFAULT FALSE
 );
 
 CREATE TABLE  token(

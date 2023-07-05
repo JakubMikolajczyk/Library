@@ -2,7 +2,9 @@ package com.Library.restAPI.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 
 import java.util.Date;
 
@@ -11,6 +13,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE borrow_history SET hidden = TRUE WHERE id = ?")
 public class BorrowHistory {
 
     @Id
@@ -29,5 +32,8 @@ public class BorrowHistory {
 
     @CreationTimestamp
     private Date endTime;
+
+    @ColumnDefault("FALSE")
+    private boolean hidden;
 
 }

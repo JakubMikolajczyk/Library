@@ -21,7 +21,11 @@ public class Borrow {
     private Specimen specimen;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @JoinTable(
+            name = "specimen",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
