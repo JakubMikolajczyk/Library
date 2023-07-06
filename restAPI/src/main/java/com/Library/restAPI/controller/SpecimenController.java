@@ -3,7 +3,6 @@ package com.Library.restAPI.controller;
 import com.Library.restAPI.dto.request.SpecimenRequest;
 import com.Library.restAPI.dto.response.SpecimenDto;
 import com.Library.restAPI.mapper.SpecimenMapper;
-import com.Library.restAPI.model.Specimen;
 import com.Library.restAPI.service.SpecimenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,11 @@ public class SpecimenController {
 
     @GetMapping
     public List<SpecimenDto> getAllSpecimen(){
-        return specimenMapper.toDto(specimenService.getAllSpecimen());
+        return specimenService
+                .getAllSpecimen()
+                .stream()
+                .map(specimenMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

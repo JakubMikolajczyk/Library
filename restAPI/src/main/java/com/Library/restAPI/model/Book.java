@@ -44,11 +44,9 @@ public class Book {
     )
     private List<Category> categories;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-    private List<Specimen> specimens;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-    private List<Borrow> borrows;
+    private List<SpecimenBorrow> specimenBorrows;
 
 
     public void addCategory(Category category){

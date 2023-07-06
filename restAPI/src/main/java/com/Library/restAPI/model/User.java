@@ -53,7 +53,7 @@ public class User implements UserDetails {
     private Date deleteDate;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Borrow> borrows;
+    private List<SpecimenBorrow> borrows;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<BorrowHistory> borrowsHistory;

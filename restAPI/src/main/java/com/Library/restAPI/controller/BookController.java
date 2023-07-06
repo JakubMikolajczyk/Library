@@ -54,7 +54,11 @@ public class BookController {
 
     @GetMapping("/{bookId}/specimens")
     public List<SpecimenDto> getSpecimenByBookId(@PathVariable Long bookId){
-        return specimenMapper.toDto(specimenService.getSpecimenByBookId(bookId));
+        return specimenService
+                .getSpecimenByBookId(bookId)
+                .stream()
+                .map(specimenMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/{bookId}/specimens")

@@ -1,6 +1,6 @@
 package com.Library.restAPI.service;
 
-import com.Library.restAPI.model.Specimen;
+import com.Library.restAPI.model.SpecimenBorrow;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 @Service
 public interface SpecimenService {
 
-    public Specimen getSpecimenById(Long id);
-    public List<Specimen> getAllSpecimen();
+    public SpecimenBorrow getSpecimenById(Long id);
+    public List<SpecimenBorrow> getAllSpecimen();
 
-    public List<Specimen> getSpecimenByBookId(Long bookId);
+    public List<SpecimenBorrow> getSpecimenByBookId(Long bookId);
 
-    public void createSpecimen(Specimen specimen);
+    public void createSpecimen(SpecimenBorrow specimenBorrow);
     public void deleteSpecimenById(Long id);
 }

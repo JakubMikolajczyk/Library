@@ -40,15 +40,12 @@ CREATE Table book_category(
     PRIMARY KEY (book_id, category_id)
 );
 
-CREATE TABLE specimen(
-    id       serial PRIMARY KEY,
-    book_id  integer REFERENCES book(id) NOT NULL
-);
 
-CREATE TABLE borrow(
-    specimen_id integer PRIMARY KEY REFERENCES specimen(id),
-    user_id     integer REFERENCES users(id) NOT NULL,
-    start_time  timestamp DEFAULT now() NOT NULL
+CREATE TABLE specimen_borrow(
+    id          serial PRIMARY KEY,
+    book_id     integer REFERENCES book(id) NOT NULL,
+    user_id     integer REFERENCES users(id),
+    start_time  timestamp DEFAULT null
 );
 
 CREATE TABLE borrow_history(

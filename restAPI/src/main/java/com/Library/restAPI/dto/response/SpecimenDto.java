@@ -6,5 +6,5 @@ import lombok.Builder;
 public record SpecimenDto(
         Long id,
         Link book,
-        Link borrow
+        boolean isBorrowed
 ) {}

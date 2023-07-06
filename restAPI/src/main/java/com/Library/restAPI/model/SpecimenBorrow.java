@@ -1,7 +1,12 @@
 package com.Library.restAPI.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -11,27 +16,21 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Borrow {
+public class SpecimenBorrow {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "specimen_id")
-    @MapsId
-    private Specimen specimen;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "specimen",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
+    @JoinColumn(name = "book_id", updatable = false)
+    @NotNull
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ColumnDefault("null")
     private User user;
 
-    @CreationTimestamp
+    @ColumnDefault("null")
     private Date startTime;
 }
