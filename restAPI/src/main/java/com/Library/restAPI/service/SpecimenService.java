@@ -8,11 +8,10 @@ import java.util.List;
 @Service
 public interface SpecimenService {
 
-    public SpecimenBorrow getSpecimenById(Long id);
-    public List<SpecimenBorrow> getAllSpecimen();
+    SpecimenBorrow getSpecimenById(Long id);
+    List<SpecimenBorrow> getAllSpecimen();
+    List<SpecimenBorrow> getSpecimenByBookId(Long bookId);
 
-    public List<SpecimenBorrow> getSpecimenByBookId(Long bookId);
-
-    public void createSpecimen(SpecimenBorrow specimenBorrow);
-    public void deleteSpecimenById(Long id);
+    void createSpecimen(SpecimenBorrow specimenBorrow);
+    void deleteSpecimenById(Long id);
 }

@@ -8,7 +8,6 @@ import com.Library.restAPI.dto.request.UserEditRequest;
 import com.Library.restAPI.mapper.BorrowHistoryMapper;
 import com.Library.restAPI.mapper.BorrowMapper;
 import com.Library.restAPI.mapper.UserMapper;
-import com.Library.restAPI.model.BorrowHistory;
 import com.Library.restAPI.security.UsernameAndIdPrincipal;
 import com.Library.restAPI.service.BorrowHistoryService;
 import com.Library.restAPI.service.BorrowService;

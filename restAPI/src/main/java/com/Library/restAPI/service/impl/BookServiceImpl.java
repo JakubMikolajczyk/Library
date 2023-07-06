@@ -4,7 +4,6 @@ import com.Library.restAPI.model.Book;
 import com.Library.restAPI.repository.BookRepository;
 import com.Library.restAPI.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Where;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
