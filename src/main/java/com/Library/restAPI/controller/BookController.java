@@ -60,6 +60,7 @@ public class BookController {
         bookService.deleteBookById(id);
     }
 
+    //1 select query, return empty list if parent book not exists
     @GetMapping("/{bookId}/specimens")
     public List<SpecimenDto> getSpecimenByBookId(@PathVariable Long bookId){
         return specimenService
@@ -68,6 +69,17 @@ public class BookController {
                 .map(specimenMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+//    throw 404 if book not exist, but 2 select query
+//    @GetMapping("/{bookId}/specimens")
+//    public List<SpecimenDto> getSpecimenByBookIdv2(@PathVariable Long bookId){
+//        return bookService
+//                .getBookById(bookId)
+//                .getSpecimenBorrows()
+//                .stream()
+//                .map(specimenMapper::toDto)
+//                .collect(Collectors.toList());
+//    }
 
     @PostMapping("/{bookId}/specimens")
     public void createSpecimenByBookId(@PathVariable Long bookId){

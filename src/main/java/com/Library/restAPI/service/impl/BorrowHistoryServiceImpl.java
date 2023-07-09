@@ -1,5 +1,6 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.BorrowHistoryNotFoundException;
 import com.Library.restAPI.model.BorrowHistory;
 import com.Library.restAPI.repository.BorrowHistoryRepository;
 import com.Library.restAPI.service.BorrowHistoryService;
@@ -34,13 +35,13 @@ public class BorrowHistoryServiceImpl implements BorrowHistoryService {
     @Override
     public BorrowHistory getHistoryById(Long id) {
         return borrowHistoryRepository.findById(id)
-                .orElseThrow(RuntimeException::new);    //TODO exception
+                .orElseThrow(BorrowHistoryNotFoundException::new);
     }
 
     @Override
     public void unHideHistoryById(Long id) {
         BorrowHistory fromDb = borrowHistoryRepository.findById(id)
-                .orElseThrow(RuntimeException::new);    //TODO exception
+                .orElseThrow(BorrowHistoryNotFoundException::new);    //TODO exception
         fromDb.setHidden(false);
         borrowHistoryRepository.save(fromDb);
     }

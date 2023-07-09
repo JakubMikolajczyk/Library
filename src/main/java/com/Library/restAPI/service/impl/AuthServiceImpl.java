@@ -3,6 +3,9 @@ package com.Library.restAPI.service.impl;
 import com.Library.restAPI.dto.request.LoginRequest;
 import com.Library.restAPI.dto.request.PasswordChangeRequest;
 import com.Library.restAPI.dto.request.RegisterRequest;
+import com.Library.restAPI.exception.TokenNotFoundException;
+import com.Library.restAPI.exception.UserNotFoundException;
+import com.Library.restAPI.exception.WrongPasswordException;
 import com.Library.restAPI.model.Token;
 import com.Library.restAPI.model.User;
 import com.Library.restAPI.repository.TokenRepository;
@@ -33,21 +36,19 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public User login(LoginRequest loginRequest, HttpServletResponse response) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.username(),
-                        loginRequest.password()
-                )
-        );
 
         User user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(() -> new UsernameNotFoundException(loginRequest.username()));
+                .orElseThrow(UserNotFoundException::new);
+
+        boolean match = passwordEncoder.matches(loginRequest.password(), user.getPassword());
+
+        if (!match)
+            throw new WrongPasswordException();
 
         UUID tokenId = UUID.randomUUID();   //Low probability of duplicate
         Cookie refreshCookie = jwtService.generateRefreshCookie(user, tokenId);
@@ -93,11 +94,11 @@ public class AuthServiceImpl implements AuthService {
     public void changePassword(String username, PasswordChangeRequest passwordChangeRequest,
                                HttpServletResponse response) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
+                .orElseThrow(UserNotFoundException::new);
         boolean match = passwordEncoder.matches(passwordChangeRequest.oldPassword(), user.getPassword());
 
         if (!match)
-            throw new InvalidParameterException("Wrong old password"); //TODO exception
+            throw new WrongPasswordException();
 
         user.setPassword(passwordEncoder.encode(passwordChangeRequest.newPassword()));
         User savedUser = userRepository.save(user);
@@ -113,7 +114,7 @@ public class AuthServiceImpl implements AuthService {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null){
-            throw new InvalidParameterException("Refresh token not found"); //TODO exception
+            throw new TokenNotFoundException();
         }
 
         Cookie cookie = Arrays.stream(request.getCookies())
@@ -123,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
 
 
         if (cookie == null){
-            throw new InvalidParameterException("Refresh token not found"); //TODO exception
+            throw new TokenNotFoundException();
         }
 
         String jwt = cookie.getValue();
@@ -131,11 +132,11 @@ public class AuthServiceImpl implements AuthService {
         if (jwtService.isExpired(jwt)){ //TODO after adding trigger for auto delete expired token remove this if
             tokenRepository.deleteById(jwtService.extractId(jwt));
             response.addCookie(jwtService.deleteRefreshToken());
-            throw new InvalidParameterException("Refresh token is expired"); //TODO exception
+            throw new TokenNotFoundException();
         }
 
         Token tokenFromDB = tokenRepository.findTokenById(jwtService.extractId(jwt))
-                .orElseThrow(() -> new InvalidParameterException("Wrong refresh token")); //TODO exception
+                .orElseThrow(TokenNotFoundException::new);
 
         response.addCookie(jwtService.generateAccessCookieFromToken(jwt));
 

@@ -1,5 +1,6 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.UserNotFoundException;
 import com.Library.restAPI.model.User;
 import com.Library.restAPI.repository.UserRepository;
 import com.Library.restAPI.service.UserService;
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found")); //TODO exception
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override

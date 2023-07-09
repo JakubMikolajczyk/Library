@@ -1,5 +1,6 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.CategoryNotFoundException;
 import com.Library.restAPI.model.Category;
 import com.Library.restAPI.repository.CategoryRepository;
 import com.Library.restAPI.service.CategoryService;
@@ -23,7 +24,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(RuntimeException::new); //TODO exception
+                .orElseThrow(CategoryNotFoundException::new);
     }
 
     @Override

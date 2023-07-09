@@ -1,5 +1,7 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.BorrowNotFoundException;
+import com.Library.restAPI.exception.DeleteBorrowedException;
 import com.Library.restAPI.model.BorrowHistory;
 import com.Library.restAPI.model.SpecimenBorrow;
 import com.Library.restAPI.repository.BorrowHistoryRepository;
@@ -26,7 +28,7 @@ public class BorrowServiceImpl implements BorrowService {
     @Override
     public SpecimenBorrow getBorrowById(Long id) {
         return specimenBorrowRepository.findByIdAndUserIsNotNull(id)
-                .orElseThrow(RuntimeException::new);    //TODO exception
+                .orElseThrow(BorrowNotFoundException::new);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class BorrowServiceImpl implements BorrowService {
     @Transactional
     public void deleteBorrowById(Long id) {
         SpecimenBorrow deletedBorrow = specimenBorrowRepository.findByIdAndUserIsNotNull(id)
-                .orElseThrow(RuntimeException::new);    //TODO exception
+                .orElseThrow(BorrowNotFoundException::new);
 
         borrowHistoryRepository.save(
                 BorrowHistory.builder()

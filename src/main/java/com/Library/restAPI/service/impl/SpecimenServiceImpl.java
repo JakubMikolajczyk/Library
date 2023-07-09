@@ -1,5 +1,7 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.DeleteBorrowedException;
+import com.Library.restAPI.exception.SpecimenNotFoundException;
 import com.Library.restAPI.model.SpecimenBorrow;
 import com.Library.restAPI.repository.SpecimenBorrowRepository;
 import com.Library.restAPI.service.SpecimenService;
@@ -17,7 +19,7 @@ public class SpecimenServiceImpl implements SpecimenService {
     @Override
     public SpecimenBorrow getSpecimenById(Long id) {
         return specimenBorrowRepository.findById(id)
-                .orElseThrow(RuntimeException::new);    //TODO exception
+                .orElseThrow(SpecimenNotFoundException::new);
     }
 
 
@@ -38,8 +40,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 
     @Override
     public void deleteSpecimenById(Long id) {
-        specimenBorrowRepository.findByIdAndUserIsNull(id)
-                .orElseThrow(RuntimeException::new);    //TODO exception (specimen might be borrowed or not exist)
+        SpecimenBorrow fromDb = specimenBorrowRepository.findById(id)
+                .orElseThrow(SpecimenNotFoundException::new);
+        if (fromDb.getUser() != null)
+            throw new DeleteBorrowedException();
         specimenBorrowRepository.deleteById(id);
     }
 }

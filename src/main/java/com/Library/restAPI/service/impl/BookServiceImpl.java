@@ -1,5 +1,6 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.BookNotFoundException;
 import com.Library.restAPI.model.Book;
 import com.Library.restAPI.repository.BookRepository;
 import com.Library.restAPI.service.BookService;
@@ -18,9 +19,9 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Book getBookById(Long id) {
+    public Book getBookById(Long id){
         return bookRepository.findById(id)
-                .orElseThrow(RuntimeException::new); //TODO Exception
+                .orElseThrow(BookNotFoundException::new);
     }
 
     @Override

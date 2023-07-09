@@ -1,5 +1,6 @@
 package com.Library.restAPI.service.impl;
 
+import com.Library.restAPI.exception.AuthorNotFoundException;
 import com.Library.restAPI.model.Author;
 import com.Library.restAPI.repository.AuthorRepository;
 import com.Library.restAPI.service.AuthorService;
@@ -17,7 +18,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author getAuthorById(Long id) {
         return authorRepository.findById(id)
-                .orElseThrow(RuntimeException::new); //TODO Exception
+                .orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
