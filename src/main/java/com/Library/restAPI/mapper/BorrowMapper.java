@@ -1,9 +1,14 @@
 package com.Library.restAPI.mapper;
 
 import com.Library.restAPI.dto.request.BorrowRequest;
+import com.Library.restAPI.dto.request.BorrowUsernameRequest;
 import com.Library.restAPI.dto.response.BorrowDto;
 import com.Library.restAPI.dto.response.Link;
+import com.Library.restAPI.exception.BorrowedException;
+import com.Library.restAPI.exception.SpecimenNotFoundException;
+import com.Library.restAPI.exception.WrongUsernameException;
 import com.Library.restAPI.model.SpecimenBorrow;
+import com.Library.restAPI.model.User;
 import com.Library.restAPI.repository.SpecimenBorrowRepository;
 import com.Library.restAPI.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +33,24 @@ public class BorrowMapper {
     }
 
     public SpecimenBorrow toEntity(BorrowRequest borrowRequest){
-        SpecimenBorrow fromDb = specimenBorrowRepository.findByIdAndUserIsNull(borrowRequest.specimenId())
-                .orElseThrow(RuntimeException::new); //TODO exception (specimen not exist or specimen is borrowed)
+        User userFromDb = userRepository.getReferenceById(borrowRequest.userId());
+        return toEntity(borrowRequest.specimenId(), userFromDb);
+    }
 
-        fromDb.setUser(userRepository.getReferenceById(borrowRequest.userId()));
+    public SpecimenBorrow toEntity(BorrowUsernameRequest borrowUsernameRequest){
+        User userFromDb = userRepository.findByUsername(borrowUsernameRequest.username())
+                .orElseThrow(WrongUsernameException::new);
+        return toEntity(borrowUsernameRequest.specimenId(), userFromDb);
+    }
+
+    private SpecimenBorrow toEntity(Long specimenId, User user){
+        SpecimenBorrow fromDb = specimenBorrowRepository.findById(specimenId)
+                .orElseThrow(SpecimenNotFoundException::new);
+
+        if (fromDb.getUser() != null)
+            throw new BorrowedException();
+
+        fromDb.setUser(user);
         fromDb.setStartTime(new Date());
         return fromDb;
     }
