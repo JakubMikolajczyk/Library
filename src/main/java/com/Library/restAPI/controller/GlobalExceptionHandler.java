@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
-
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -22,6 +20,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(WrongPasswordException.class)
     public ResponseEntity<ErrorMessage> wrongPassword(){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Wrong password."));
+    }
+
+    @ExceptionHandler(WrongUsernameException.class)
+    public ResponseEntity<ErrorMessage> wrongUsername(){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Wrong username."));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -59,9 +62,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorMessage("Borrow history not found."));
     }
 
-    @ExceptionHandler(DeleteBorrowedException.class)
+    @ExceptionHandler(BorrowedException.class)
     public ResponseEntity<ErrorMessage> deleteBorrowed(){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Specimen is borrowed, cant delete."));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessage("Specimen is borrowed."));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

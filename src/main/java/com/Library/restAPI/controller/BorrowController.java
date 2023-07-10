@@ -1,6 +1,7 @@
 package com.Library.restAPI.controller;
 
 import com.Library.restAPI.dto.request.BorrowRequest;
+import com.Library.restAPI.dto.request.BorrowUsernameRequest;
 import com.Library.restAPI.dto.response.BorrowDto;
 import com.Library.restAPI.mapper.BorrowMapper;
 import com.Library.restAPI.service.BorrowService;
@@ -36,6 +37,10 @@ public class BorrowController {
         borrowService.createBorrow(borrowMapper.toEntity(borrowRequest));
     }
 
+    @PostMapping("/byUsername")
+    public void createBorrowByUsername(@RequestBody BorrowUsernameRequest borrowUsernameRequest){
+        borrowService.createBorrow(borrowMapper.toEntity(borrowUsernameRequest));
+    }
     @DeleteMapping({"/{id}"})
     public void deleteBorrow(@PathVariable Long id){
         borrowService.deleteBorrowById(id);

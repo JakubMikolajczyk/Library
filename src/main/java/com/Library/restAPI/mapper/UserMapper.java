@@ -17,6 +17,7 @@ public class UserMapper {
     private final UserRepository userRepository;
     public UserDto toDto(User entity){
         return UserDto.builder()
+                .id(entity.getId())
                 .username(entity.getUsername())
                 .email(entity.getEmail())
                 .name(entity.getName())

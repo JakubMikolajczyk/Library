@@ -6,6 +6,7 @@ import com.Library.restAPI.dto.request.RegisterRequest;
 import com.Library.restAPI.exception.TokenNotFoundException;
 import com.Library.restAPI.exception.UserNotFoundException;
 import com.Library.restAPI.exception.WrongPasswordException;
+import com.Library.restAPI.exception.WrongUsernameException;
 import com.Library.restAPI.model.Token;
 import com.Library.restAPI.model.User;
 import com.Library.restAPI.repository.TokenRepository;
@@ -43,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
 
         User user = userRepository.findByUsername(loginRequest.username())
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(WrongUsernameException::new);
 
         boolean match = passwordEncoder.matches(loginRequest.password(), user.getPassword());
 

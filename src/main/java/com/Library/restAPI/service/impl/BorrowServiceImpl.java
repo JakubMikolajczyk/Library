@@ -1,7 +1,6 @@
 package com.Library.restAPI.service.impl;
 
 import com.Library.restAPI.exception.BorrowNotFoundException;
-import com.Library.restAPI.exception.DeleteBorrowedException;
 import com.Library.restAPI.model.BorrowHistory;
 import com.Library.restAPI.model.SpecimenBorrow;
 import com.Library.restAPI.repository.BorrowHistoryRepository;
