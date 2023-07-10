@@ -39,15 +39,18 @@ public class BorrowHistoryServiceImpl implements BorrowHistoryService {
     }
 
     @Override
-    public void unHideHistoryById(Long id) {
-        BorrowHistory fromDb = borrowHistoryRepository.findById(id)
-                .orElseThrow(BorrowHistoryNotFoundException::new);    //TODO exception
+    public void unHideHistoryById(Long historyId, Long userId) {
+        BorrowHistory fromDb = borrowHistoryRepository.findByIdAndUserId(historyId, userId)
+                .orElseThrow(BorrowHistoryNotFoundException::new);
         fromDb.setHidden(false);
         borrowHistoryRepository.save(fromDb);
     }
 
     @Override
-    public void hideHistoryById(Long id) {
-        borrowHistoryRepository.deleteById(id);
+    public void hideHistoryById(Long historyId, Long userId) {
+        BorrowHistory fromDb = borrowHistoryRepository.findByIdAndUserId(historyId, userId)
+                .orElseThrow(BorrowHistoryNotFoundException::new);
+        fromDb.setHidden(true);
+        borrowHistoryRepository.save(fromDb);
     }
 }

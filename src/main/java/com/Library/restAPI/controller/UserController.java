@@ -62,6 +62,16 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/me/borrow-histories/{historyId}/hide")
+    public void hideMyHistory(@PathVariable Long historyId){
+        borrowHistoryService.hideHistoryById(historyId, UsernameAndIdPrincipal.getIdFromSecurityCtx());
+    }
+
+    @PostMapping("/me/borrow-histories/{historyId}/unhide")
+    public void unhideMyHistory(@PathVariable Long historyId){
+        borrowHistoryService.unHideHistoryById(historyId, UsernameAndIdPrincipal.getIdFromSecurityCtx());
+    }
+
     @PostMapping("/me/change-password")
     public void changePassword(HttpServletResponse response, PasswordChangeRequest passwordChangeRequest){
         authService.changePassword(

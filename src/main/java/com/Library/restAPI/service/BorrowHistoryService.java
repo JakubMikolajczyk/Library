@@ -14,6 +14,6 @@ public interface BorrowHistoryService {
 
     BorrowHistory getHistoryById(Long id);
 
-    void unHideHistoryById(Long id);
-    void hideHistoryById(Long id);
+    void unHideHistoryById(Long historyId, Long userId);
+    void hideHistoryById(Long historyId, Long userId);
 }
