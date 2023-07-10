@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/borrowHistories")
+@RequestMapping("api/v1/borrow-histories")
 public class BorrowHistoryController {
 
     private final BorrowHistoryService borrowHistoryService;

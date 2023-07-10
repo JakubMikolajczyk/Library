@@ -53,7 +53,7 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/me/borrowHistories")
+    @GetMapping("/me/borrow-histories")
     public List<BorrowHistoryDto> getMyHistory(@RequestParam(required = false) boolean showHidden){
         return borrowHistoryService
                 .getAllHistoryByUserId(UsernameAndIdPrincipal.getIdFromSecurityCtx(),showHidden)
@@ -91,7 +91,7 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/{userId}/borrowHistories")
+    @GetMapping("/{userId}/borrow-histories")
     public List<BorrowHistoryDto> getUserHistories(@PathVariable Long userId){
         return borrowHistoryService
                 .getAllHistoryByUserId(userId, true)
