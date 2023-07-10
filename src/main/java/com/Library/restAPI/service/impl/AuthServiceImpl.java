@@ -50,8 +50,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!match)
             throw new WrongPasswordException();
-
-        UUID tokenId = UUID.randomUUID();   //Low probability of duplicate
+     UUID tokenId = UUID.randomUUID();   //Low probability of duplicate
         Cookie refreshCookie = jwtService.generateRefreshCookie(user, tokenId);
         saveUserToken(user, refreshCookie.getValue());
 
@@ -92,9 +91,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void changePassword(String username, PasswordChangeRequest passwordChangeRequest,
+    public void changePassword(Long id, PasswordChangeRequest passwordChangeRequest,
                                HttpServletResponse response) {
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         boolean match = passwordEncoder.matches(passwordChangeRequest.oldPassword(), user.getPassword());
 

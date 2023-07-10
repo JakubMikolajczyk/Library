@@ -37,7 +37,7 @@ public class AuthController {
 
     }
 
-    @RequestMapping("/refresh-token")
+    @GetMapping("/refresh-token")
     public UserDto refreshToken(HttpServletRequest request, HttpServletResponse response){
         return userMapper.toDto(authService.refreshToken(request, response));
     }

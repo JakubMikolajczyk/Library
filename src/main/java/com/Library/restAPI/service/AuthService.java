@@ -13,6 +13,6 @@ public interface AuthService {
         User login(LoginRequest loginRequest, HttpServletResponse response);
         User register(RegisterRequest registerRequest, HttpServletResponse response);
         void logoutAll(User user);
-        void changePassword(String username, PasswordChangeRequest passwordChangeRequest, HttpServletResponse response);
+        void changePassword(Long id, PasswordChangeRequest passwordChangeRequest, HttpServletResponse response);
         User refreshToken(HttpServletRequest request, HttpServletResponse response);
 }

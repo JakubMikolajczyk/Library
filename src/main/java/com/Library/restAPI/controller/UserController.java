@@ -1,5 +1,6 @@
 package com.Library.restAPI.controller;
 
+import com.Library.restAPI.dto.request.PasswordChangeRequest;
 import com.Library.restAPI.dto.response.BorrowDto;
 import com.Library.restAPI.dto.response.BorrowHistoryDto;
 import com.Library.restAPI.dto.response.UserDto;
@@ -9,9 +10,12 @@ import com.Library.restAPI.mapper.BorrowHistoryMapper;
 import com.Library.restAPI.mapper.BorrowMapper;
 import com.Library.restAPI.mapper.UserMapper;
 import com.Library.restAPI.security.UsernameAndIdPrincipal;
+import com.Library.restAPI.service.AuthService;
 import com.Library.restAPI.service.BorrowHistoryService;
 import com.Library.restAPI.service.BorrowService;
 import com.Library.restAPI.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +30,7 @@ public class UserController {
     private final UserService userService;
     private final BorrowService borrowService;
     private final BorrowHistoryService borrowHistoryService;
+    private final AuthService authService;
     private final UserMapper userMapper;
     private final BorrowMapper borrowMapper;
 
@@ -57,6 +62,16 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @PostMapping("/me/change-password")
+    public void changePassword(HttpServletResponse response, PasswordChangeRequest passwordChangeRequest){
+        authService.changePassword(
+                UsernameAndIdPrincipal.getIdFromSecurityCtx(),
+                passwordChangeRequest,
+                response);
+    }
+
+
+    //STAFF and ADMIN
     @GetMapping
     public List<UserDto> getAllUsers(){
         return userService.getAllUsers().stream().map(userMapper::toDto).collect(Collectors.toList());
