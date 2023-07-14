@@ -62,3 +62,19 @@ CREATE TABLE  token(
     expire_date timestamp NOT NULL,
     user_id integer REFERENCES  users(id)
 );
+
+CREATE FUNCTION remove_expired_token()
+RETURNS trigger
+AS $$
+BEGIN
+DELETE FROM token WHERE expire_date < now();
+RETURN new;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER token_trigger
+    BEFORE INSERT
+    ON token
+    FOR EACH STATEMENT
+    EXECUTE PROCEDURE remove_expired_token();

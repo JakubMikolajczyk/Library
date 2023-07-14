@@ -17,16 +17,13 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.security.InvalidParameterException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -87,10 +84,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logoutAll(User user) {
-        tokenRepository.deleteAll(user.getTokens());
+        tokenRepository.deleteAllByUserId(user.getId());
     }
 
     @Override
+    @Transactional
     public void changePassword(Long id, PasswordChangeRequest passwordChangeRequest,
                                HttpServletResponse response) {
         User user = userRepository.findById(id)
@@ -118,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         Cookie cookie = Arrays.stream(request.getCookies())
-                .filter(cookie1 -> cookie1.getName().equals("accessToken"))
+                .filter(cookie1 -> cookie1.getName().equals("refreshToken"))
                 .findFirst()
                 .orElse(null);
 
@@ -128,14 +126,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String jwt = cookie.getValue();
-
-        if (jwtService.isExpired(jwt)){ //TODO after adding trigger for auto delete expired token remove this if
-            tokenRepository.deleteById(jwtService.extractId(jwt));
-            response.addCookie(jwtService.deleteRefreshToken());
-            throw new TokenNotFoundException();
-        }
-
-        Token tokenFromDB = tokenRepository.findTokenById(jwtService.extractId(jwt))
+        Token tokenFromDB = tokenRepository.findTokenByIdAndExpireDateGreaterThan(jwtService.extractId(jwt), new Date())
                 .orElseThrow(TokenNotFoundException::new);
 
         response.addCookie(jwtService.generateAccessCookieFromToken(jwt));

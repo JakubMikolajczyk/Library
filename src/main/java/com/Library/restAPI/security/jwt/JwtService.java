@@ -17,7 +17,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.UUID;
 import java.util.function.Function;
 
 @RequiredArgsConstructor
@@ -118,7 +121,7 @@ public class JwtService {
         Cookie cookie = new Cookie("refreshToken", generateRefreshToken(user, tokenId));
 //        cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        //TODO after add trigger for auto delete expired token, add maxAge
+        cookie.setMaxAge(EXPIRATION_MS_REFRESH/1000);
         cookie.setPath("/api/v1/auth/refresh-token");
         return cookie;
     }
